@@ -1,0 +1,41 @@
+{
+  "name": "vue-flext",
+  "version": "1.0.0",
+  "author": "Kenny Romanov",
+  "main": "dist/index.js",
+  "devDependencies": {
+    "@babel/cli": "^7.26.4",
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.26.0",
+    "@types/minimist": "^1.2.5",
+    "@types/node": "^22.14.0",
+    "esbuild": "^0.25.1",
+    "esbuild-plugin-import-glob": "^0.1.1",
+    "tsc-alias": "^1.8.11",
+    "typescript": "^5.8.2"
+  },
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.js"
+  },
+  "bin": {
+    "exjsona": "./bin/run"
+  },
+  "description": "A library for user-friendly variables in JSON",
+  "files": [
+    "dist/"
+  ],
+  "keywords": ["templates", "templating engine", "modular templates", "handlebars"],
+  "license": "MIT",
+  "scripts": {
+    "build:types": "tsc && tsc-alias",
+    "build": "bin/build && npm run build:types",
+    "prepare": "npm run build"
+  },
+  "type": "commonjs",
+  "types": "dist/src/index.d.ts",
+  "dependencies": {
+    "@trustme24/flext": "^1.0.0"
+  }
+}
