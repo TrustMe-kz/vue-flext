@@ -1,7 +1,7 @@
 {
   "name": "vue-flext",
-  "version": "1.0.1",
-  "description": "A Handlebars on Vue",
+  "version": "1.0.2",
+  "description": "Handlebars on Vue",
   "keywords": ["templates", "templating engine", "handlebars on vue"],
   "type": "module",
   "main": "dist/index.es.js",
