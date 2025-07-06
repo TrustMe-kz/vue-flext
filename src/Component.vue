@@ -3,12 +3,12 @@
 import { defineComponent, onErrorCaptured, ref } from 'vue';
 import { Flext } from '@trustme24/flext';
 import { Nullable, NullablePropType } from '@/types';
-import Paged from 'vue-paged';
+import Display from 'vue-a4';
 
 export default defineComponent({
   name: 'Flext',
 
-  components: { Paged },
+  components: { Display },
 
   props: {
     template: {
@@ -17,6 +17,10 @@ export default defineComponent({
     },
 
     paged: {
+      type: Boolean as NullablePropType<boolean>,
+      default: false
+    },
+    noTheme: {
       type: Boolean as NullablePropType<boolean>,
       default: false
     },
@@ -87,9 +91,9 @@ export default defineComponent({
   </slot>
 
   <slot v-else-if="html" :html="html" :paged="paged">
-    <Paged v-if="paged">
+    <Display v-if="paged" :no-theme="noTheme">
       <span v-html="html" />
-    </Paged>
+    </Display>
 
     <span v-else v-html="html" />
   </slot>
