@@ -1,15 +1,24 @@
 <script lang="ts">
 
-import { defineComponent, onErrorCaptured, ref, PropType } from 'vue';
+import { defineComponent, onErrorCaptured, ref } from 'vue';
 import { Flext } from '@trustme24/flext';
+import { Nullable, NullablePropType } from '@/types';
+import Paged from 'vue-paged';
 
 export default defineComponent({
   name: 'Flext',
 
+  components: { Paged },
+
   props: {
     template: {
-      type: String as PropType<string|null|undefined>,
+      type: String as NullablePropType<string>,
       default: null
+    },
+
+    paged: {
+      type: Boolean as NullablePropType<boolean>,
+      default: false
     },
   },
 
@@ -35,12 +44,21 @@ export default defineComponent({
       },
       immediate: true
     },
+
     val: {
-      handler(val: string|null): void {
+      handler(val: Nullable<string>): void {
         this.errors = [];
 
         try { this.html = this.flext?.setHbs(val)?.html ?? null; }
         catch (e: any) { this.errors.push(e); }
+      },
+      immediate: true
+    },
+
+    html: {
+      handler(val: Nullable<string>): void {
+        if (val) this.$emit('render', val);
+        this.$emit('update:html', val);
       },
       immediate: true
     },
@@ -68,8 +86,12 @@ export default defineComponent({
     </ul>
   </slot>
 
-  <slot v-else-if="html" :html="html">
-    <span v-html="html" />
+  <slot v-else-if="html" :html="html" :paged="paged">
+    <Paged v-if="paged">
+      <span v-html="html" />
+    </Paged>
+
+    <span v-else v-html="html" />
   </slot>
 
   <slot v-else name="no-content">
