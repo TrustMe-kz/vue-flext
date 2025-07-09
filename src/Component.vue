@@ -2,7 +2,7 @@
 
 import { defineComponent, onErrorCaptured, ref } from 'vue';
 import { Flext } from '@trustme24/flext';
-import { Nullable, NullablePropType } from '@/types';
+import { Nullable, NullablePropType, Obj } from '@/types';
 import Display from 'vue-a4';
 
 export default defineComponent({
@@ -30,6 +30,7 @@ export default defineComponent({
     const errors = ref<Error[]>([]);
     const val = ref<string|null>(props?.template ?? null);
     const flext = ref<Flext | null>(new Flext(val.value));
+    const dataModel = ref<Obj | null>(null);
     const html = ref<string|null>(null);
 
     onErrorCaptured((err) => {
@@ -38,7 +39,13 @@ export default defineComponent({
     });
 
 
-    return { errors, val, flext, html };
+    return {
+      errors,
+      val,
+      flext,
+      dataModel,
+      html,
+    };
   },
 
   watch: {
@@ -53,8 +60,13 @@ export default defineComponent({
       handler(val: Nullable<string>): void {
         this.errors = [];
 
-        try { this.html = this.flext?.setHbs(val)?.html ?? null; }
-        catch (e: any) { this.errors.push(e); }
+        try {
+          this.flext?.setTemplate(val);
+          this.html = this.flext?.html ?? null;
+          this.dataModel = this.flext?.model ?? null;
+        } catch (e: any) {
+          this.errors.push(e);
+        }
       },
       immediate: true
     },
@@ -63,6 +75,13 @@ export default defineComponent({
       handler(val: Nullable<string>): void {
         if (val) this.$emit('render', val);
         this.$emit('update:html', val);
+      },
+      immediate: true
+    },
+    dataModel: {
+      handler(val: Nullable<string>): void {
+        if (val) this.$emit('compile', val);
+        this.$emit('update:dataModel', val);
       },
       immediate: true
     },
