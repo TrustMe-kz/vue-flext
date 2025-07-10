@@ -80,7 +80,7 @@ export default defineComponent({
     },
     dataModel: {
       handler(val: Nullable<string>): void {
-        if (val) this.$emit('compile', val);
+        if (val) this.$emit('compiled', val);
         this.$emit('update:dataModel', val);
       },
       immediate: true
