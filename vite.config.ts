@@ -21,11 +21,11 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, './src/index.ts'),
-      name: 'flext',
+      name: 'vue-flext',
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: [ 'vue' ],
+      external: [ 'vue', '@trustme24/flext' ],
       output: {
         globals: {
           vue: 'Vue',

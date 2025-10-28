@@ -1,6 +1,6 @@
 {
   "name": "vue-flext",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "description": "A Powerful Templating Engine",
   "keywords": ["templates", "templating engine", "modular templates", "handlebars"],
   "type": "module",
@@ -11,13 +11,12 @@
       "import": "./dist/index.es.js",
       "types": "./dist/index.d.ts"
     },
-    "./index.css": "./dist/index.css"
+    "./index.css": "./dist/vue-flext.css"
   },
   "scripts": {
     "lint": "eslint",
     "build:types": "vue-tsc --noEmit false",
-    "build:css": "tailwindcss -i ./src/index.css -o ./dist/index.css --minify",
-    "build": "vite build && npm run build:types && npm run build:css",
+    "build": "vite build && npm run build:types",
     "prepare": "npm run build"
   },
   "files": [
@@ -27,28 +26,30 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.28.3",
-    "@babel/core": "^7.28.4",
-    "@babel/preset-env": "^7.28.3",
-    "@babel/preset-typescript": "^7.27.1",
-    "@eslint/js": "^9.37.0",
-    "@tailwindcss/cli": "^4.1.14",
-    "@tailwindcss/vite": "^4.1.14",
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-typescript": "^7.28.5",
+    "@eslint/js": "^9.38.0",
+    "@tailwindcss/cli": "^4.1.16",
+    "@tailwindcss/vite": "^4.1.16",
     "@types/minimist": "^1.2.5",
-    "@types/node": "^24.8.0",
+    "@types/node": "^24.9.1",
     "@vitejs/plugin-vue": "^6.0.1",
     "esbuild": "^0.25.11",
     "esbuild-plugin-import-glob": "^0.1.1",
     "eslint-plugin-vue": "^10.5.1",
     "globals": "^16.4.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.1",
-    "vite": "^7.1.10",
+    "typescript-eslint": "^8.46.2",
+    "vite": "^7.1.12",
     "vite-plugin-eslint": "^1.8.1",
     "vue-eslint-parser": "^10.2.0",
-    "vue-tsc": "^3.1.1"
+    "vue-tsc": "^3.1.2"
+  },
+  "peerDependencies": {
+    "@trustme24/flext": "^1.4.3"
   },
   "dependencies": {
-    "@trustme24/flext": "^1.4.1",
     "vue": "^3.5.22",
     "vue-a4": "^1.0.2"
   }
