@@ -15,7 +15,7 @@ Vue Flext is maintained by [TrustMe](https://trustme24.com/).
 import Flext from 'vue-flext';
 
 const template = `
-  {{!-- @v "1.0.beta2" --}}
+  {{!-- @v "1.0.beta3" --}}
   {{!-- @use "put" --}}
 
   <div class="text-center text-red-500">{{ put data.helloWorld 'No hello world...' }}</div>
@@ -33,7 +33,7 @@ const data = { helloWorld: 'Hello World!' };
 1. Install **dependencies**:
 
 ```shell
-npm i tailwindcss vue-flext
+npm i tailwindcss vue-flext @trustme24/flext
 ```
 
 2. Add the **CSS** import in your CSS file:
