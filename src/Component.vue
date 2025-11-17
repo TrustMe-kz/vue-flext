@@ -26,6 +26,10 @@ export default defineComponent({
       default: null
     },
 
+    sandbox: {
+      type: Boolean as NullablePropType<boolean>,
+      default: false
+    },
     paged: {
       type: Boolean as NullablePropType<boolean>,
       default: false
@@ -37,11 +41,15 @@ export default defineComponent({
   },
 
   setup(props) {
+    const sandboxEl = ref<HTMLDivElement | null>(null);
+    const sandboxStyle = ref<HTMLStyleElement | null>(null);
+    const sandboxRoot = ref<HTMLDivElement | null>(null);
     const errors = ref<Error[]>([]);
     const templateVal = ref<string|null>(props?.template ?? null);
     const flext = ref<Flext | null>(new Flext(templateVal.value));
     const dataModel = ref<Obj | null>(null);
     const data = ref<Obj | null>(null);
+    const css = ref<string|null>(null);
     const html = ref<string|null>(null);
 
     onErrorCaptured((err) => {
@@ -51,24 +59,62 @@ export default defineComponent({
 
 
     return {
+      sandboxEl,
+      sandboxStyle,
+      sandboxRoot,
       errors,
       templateVal,
       flext,
       dataModel,
       data,
+      css,
       html,
     };
   },
 
   methods: {
-    setTemplate(val: string, data: Obj = {}): void {
+    async setTemplate(val: string, data: Obj = {}): Promise<void> {
       try {
-        this.flext?.setTemplate(val)?.setData(data);
+        this.flext?.setTemplate(val)?.setData(data ?? {});
+
         this.html = this.flext?.html ?? null;
+
         this.dataModel = this.flext?.model ?? null;
+
+        this.css = await this.flext?.getCss() ?? null;
       } catch (e: any) {
         this.errors.push(e);
       }
+    },
+    sandboxPreviewCss(val: string): void {
+
+      // Doing some checks
+
+      if (!this.sandboxStyle) {
+        console.warn('Flext: Unable to render the document: The sandbox is not ready yet');
+        return;
+      }
+
+
+      // Rendering the styles
+
+      this.sandboxStyle.textContent = val;
+    },
+    sandboxPreview(html: string, css?: string|null): void {
+
+      // Doing some checks
+
+      if (!this.sandboxRoot) {
+        console.warn('Flext: Unable to render the document: The sandbox is not ready yet');
+        return;
+      }
+
+
+      // Rendering the document
+
+      this.sandboxPreviewCss(css ?? '');
+
+      this.sandboxRoot.innerHTML = html;
     },
   },
 
@@ -109,18 +155,75 @@ export default defineComponent({
       deep: true
     },
 
+    sandboxEl: {
+      handler(val: HTMLDivElement | null): void {
+
+        // Doing some checks
+
+        if (!val) return;
+
+
+        // Creating the sandbox
+
+        const shadow = val.attachShadow({ mode: 'open' });
+        const styleEl = document.createElement('style');
+        const rootEl = document.createElement('div');
+
+        shadow.appendChild(styleEl);
+
+        shadow.appendChild(rootEl);
+
+
+        // Updating the data
+
+        this.sandboxStyle = styleEl;
+
+        this.sandboxRoot = rootEl;
+      },
+      immediate: true,
+      deep: true
+    },
+
     templateVal: {
-      handler(val: Nullable<string>): void {
+      async handler(val: Nullable<string>): Promise<void> {
         if (!val) return;
 
         this.errors = [];
 
-        this.setTemplate(val, this.data);
+        await this.setTemplate(val, this.data);
       },
       immediate: true
     },
-    data: {
+    css: {
+      handler(val: Nullable<string>): void {
+
+        // Doing some checks
+
+        if (!val) {
+          this.sandboxPreview(this.html, '');
+          return;
+        }
+
+
+        // Rendering the styles
+
+        this.sandboxPreview(this.html, val);
+
+        this.$emit('cssRender', val);
+      },
+      immediate: true,
+      deep: true
+    },
+    dataModel: {
       handler(val: Nullable<Obj>): void {
+        if (val) this.$emit('compiled', val);
+        this.$emit('update:dataModel', val);
+      },
+      immediate: true,
+      deep: true
+    },
+    data: {
+      async handler(val: Nullable<Obj>): Promise<void> {
 
         // Doing some checks
 
@@ -131,7 +234,7 @@ export default defineComponent({
 
         this.errors = [];
 
-        this.setTemplate(this.templateVal, val);
+        await this.setTemplate(this.templateVal, val);
 
 
         // Emitting the values
@@ -145,18 +248,30 @@ export default defineComponent({
     },
     html: {
       handler(val: Nullable<string>): void {
-        if (val) this.$emit('render', val);
+
+        // Doing some checks
+
+        if (!val) {
+          this.sandboxPreview('');
+
+          this.$emit('update:html', null);
+
+          return;
+        }
+
+
+        // Rendering the document
+
+        this.sandboxPreview(val, this.css);
+
+
+        // Emitting the values
+
+        this.$emit('render', val);
+
         this.$emit('update:html', val);
       },
       immediate: true
-    },
-    dataModel: {
-      handler(val: Nullable<Obj>): void {
-        if (val) this.$emit('compiled', val);
-        this.$emit('update:dataModel', val);
-      },
-      immediate: true,
-      deep: true
     },
   },
 });
@@ -167,30 +282,40 @@ export default defineComponent({
   <slot
     v-if="errors?.length"
     name="errors"
-    :data="errors"
+    :errors="errors"
   >
     <ul class="flex flex-col gap-8">
-      <li v-for="(error, i) of errors" class="flex flex-col gap-2" :key="i">
-        <div class="font-semibold">
-          ⚠️&nbsp;{{ error?.name ?? 'Error' }}
-        </div>
+      <li v-for="(error, i) of errors" :key="i" class="flex flex-col gap-2">
+        <slot name="error" :num="i" :error="error">
+          <div class="font-semibold">
+            ⚠️&nbsp;{{ error?.name ?? 'Error' }}
+          </div>
 
-        <div>
-          {{ error?.message ?? 'Unknown Error' }}
-        </div>
+          <div>
+            {{ error?.message ?? 'Unknown Error' }}
+          </div>
+        </slot>
       </li>
     </ul>
   </slot>
 
-  <slot v-else-if="html" :html="html" :paged="paged">
-    <Paged v-if="paged" :key="html" :no-theme="noTheme">
-      <span v-html="html" />
-    </Paged>
+  <slot v-else-if="html" name="content" :paged="paged" :html="html">
+    <slot v-if="paged" name="paged" :html="html">
+      <Paged :key="html" :no-theme="noTheme">
+        <span v-html="html" />
+      </Paged>
+    </slot>
 
-    <span v-else v-html="html" />
+    <slot v-else-if="sandbox" name="sandbox" :html="html">
+      <div ref="sandboxEl" />
+    </slot>
+
+    <slot v-else :html="html">
+      <span v-html="html" />
+    </slot>
   </slot>
 
-  <slot v-else name="no-content">
+  <slot v-else name="noContent">
     No Content
   </slot>
 </template>
