@@ -1,4 +1,8 @@
-import Component from './Component.vue';
+import FlextDocument from './components/Document.vue';
+import FlextFields from './components/Fields.vue';
+import Flext from './Component.vue';
 import './index.css';
 
-export default Component;
+export default Flext;
+
+export { Flext, FlextDocument, FlextFields };

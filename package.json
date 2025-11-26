@@ -1,6 +1,6 @@
 {
   "name": "vue-flext",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A Powerful Templating Engine",
   "keywords": ["templates", "templating engine", "modular templates", "handlebars"],
   "type": "module",
@@ -15,8 +15,10 @@
   },
   "scripts": {
     "lint": "eslint",
+    "start:test-app": "cd test/app && npm run test-app",
     "build:types": "vue-tsc --noEmit false",
     "build": "vite build && npm run build:types",
+    "test:app": "npm run build && cd test/app && npm i && npm run test-app",
     "prepare": "npm run build"
   },
   "files": [
@@ -30,27 +32,24 @@
     "@babel/preset-env": "^7.28.5",
     "@babel/preset-typescript": "^7.28.5",
     "@eslint/js": "^9.39.1",
-    "@tailwindcss/cli": "^4.1.17",
     "@tailwindcss/vite": "^4.1.17",
-    "@types/minimist": "^1.2.5",
     "@types/node": "^24.10.1",
-    "@vitejs/plugin-vue": "^6.0.1",
-    "esbuild": "^0.27.0",
-    "esbuild-plugin-import-glob": "^0.1.1",
-    "eslint-plugin-vue": "^10.5.1",
+    "@vitejs/plugin-vue": "^6.0.2",
+    "eslint-plugin-vue": "^10.6.1",
     "globals": "^16.5.0",
+    "sass-embedded": "^1.93.3",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.2",
+    "typescript-eslint": "^8.48.0",
+    "vite": "^7.2.4",
     "vite-plugin-eslint": "^1.8.1",
     "vue-eslint-parser": "^10.2.0",
-    "vue-tsc": "^3.1.4"
+    "vue-tsc": "^3.1.5"
   },
   "peerDependencies": {
-    "@trustme24/flext": "^1.5.1"
+    "@trustme24/flext": "^1.7.0"
   },
   "dependencies": {
-    "vue": "^3.5.24",
+    "vue": "^3.5.25",
     "vue-a4": "^1.0.2"
   }
 }
