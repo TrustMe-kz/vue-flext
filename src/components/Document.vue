@@ -6,6 +6,13 @@ import { Nullable, NullablePropType, Obj } from '@/types';
 import { has } from '@/lib';
 import Paged from 'vue-a4';
 
+
+// Constants
+
+export const CSS_FIX_STYLES = `/* fix */
+:root, :host { --un-text-opacity: 100%; }`;
+
+
 export default defineComponent({
   name: 'FlextDocument',
 
@@ -25,7 +32,7 @@ export default defineComponent({
       default: null
     },
 
-    modelValue: {
+    value: {
       type: Object as NullablePropType<Obj>,
       default: null
     },
@@ -46,13 +53,12 @@ export default defineComponent({
 
   setup(props) {
     const sandboxEl = ref<HTMLDivElement | null>(null);
-    const sandboxStyle = ref<HTMLStyleElement | null>(null);
+    const sandboxStyles = ref<HTMLStyleElement | null>(null);
     const sandboxRoot = ref<HTMLDivElement | null>(null);
     const errors = ref<Error[]>([]);
     const templateVal = ref<string|null>(props?.template ?? null);
     const flext = ref<Flext | null>(new Flext(templateVal.value));
     const dataModel = ref<Obj | null>(null);
-    const data = ref<Obj | null>(null);
     const css = ref<string|null>(null);
     const html = ref<string|null>(null);
 
@@ -64,22 +70,21 @@ export default defineComponent({
 
     return {
       sandboxEl,
-      sandboxStyle,
+      sandboxStyles,
       sandboxRoot,
       errors,
       templateVal,
       flext,
       dataModel,
-      data,
       css,
       html,
     };
   },
 
   methods: {
-    async setTemplate(val: string, data: Obj = {}): Promise<void> {
+    async setTemplate(val: string, _data: Obj = {}): Promise<void> {
       try {
-        this.flext?.setTemplate(val)?.setData(data ?? {});
+        this.flext?.setTemplate(val)?.setData(_data ?? {});
 
         this.html = this.flext?.html ?? null;
 
@@ -94,7 +99,7 @@ export default defineComponent({
 
       // Doing some checks
 
-      if (!this.sandboxStyle) {
+      if (!this.sandboxStyles) {
         console.warn('Flext: Unable to render the document: The sandbox is not ready yet');
         return;
       }
@@ -102,7 +107,7 @@ export default defineComponent({
 
       // Rendering the styles
 
-      this.sandboxStyle.textContent = val;
+      this.sandboxStyles.textContent = val + '\n' + CSS_FIX_STYLES;
     },
     sandboxPreview(html: string, css?: string|null): void {
 
@@ -164,10 +169,19 @@ export default defineComponent({
       immediate: true,
       deep: true
     },
-    modelValue: {
-      handler(val: Nullable<Obj>): void {
+    value: {
+      async handler(val: Nullable<Obj>): Promise<void> {
+
+        // Doing some checks
+
         if (!val) return;
-        this.data = val;
+
+
+        // Setting the template
+
+        this.errors = [];
+
+        await this.setTemplate(this.templateVal, val);
       },
       immediate: true,
       deep: true
@@ -188,14 +202,12 @@ export default defineComponent({
         const rootEl = document.createElement('div');
 
         shadow.appendChild(styleEl);
-
         shadow.appendChild(rootEl);
 
 
         // Updating the data
 
-        this.sandboxStyle = styleEl;
-
+        this.sandboxStyles = styleEl;
         this.sandboxRoot = rootEl;
       },
       immediate: true,
@@ -208,7 +220,7 @@ export default defineComponent({
 
         this.errors = [];
 
-        await this.setTemplate(val, this.data);
+        await this.setTemplate(val, this.value);
       },
       immediate: true
     },
@@ -234,32 +246,7 @@ export default defineComponent({
     },
     dataModel: {
       handler(val: Nullable<Obj>): void {
-        if (val) this.$emit('compiled', val);
-        this.$emit('update:dataModel', val);
-      },
-      immediate: true,
-      deep: true
-    },
-    data: {
-      async handler(val: Nullable<Obj>): Promise<void> {
-
-        // Doing some checks
-
-        if (!val) return;
-
-
-        // Setting the template
-
-        this.errors = [];
-
-        await this.setTemplate(this.templateVal, val);
-
-
-        // Emitting the values
-
-        if (val) this.$emit('change', val);
-
-        this.$emit('update:modelValue', val);
+        if (val) this.$emit('dataModel', val);
       },
       immediate: true,
       deep: true
@@ -271,9 +258,6 @@ export default defineComponent({
 
         if (!val) {
           this.sandboxPreview('');
-
-          this.$emit('update:html', null);
-
           return;
         }
 
@@ -286,8 +270,6 @@ export default defineComponent({
         // Emitting the values
 
         this.$emit('render', val);
-
-        this.$emit('update:html', val);
       },
       immediate: true
     },

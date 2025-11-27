@@ -1,6 +1,6 @@
 {
   "name": "vue-flext",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "A Powerful Templating Engine",
   "keywords": ["templates", "templating engine", "modular templates", "handlebars"],
   "type": "module",

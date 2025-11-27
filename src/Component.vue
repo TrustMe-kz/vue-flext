@@ -1,8 +1,13 @@
 <script setup lang="ts">
 
+import { computed } from 'vue';
+import { MetadataModelNode } from '@trustme24/flext';
 import { Obj } from '@/types';
 import Document from './components/Document.vue';
 import Fields from './components/Fields.vue';
+
+
+// Defining the props
 
 const props = defineProps<{
   template?: string|null,
@@ -20,6 +25,39 @@ const props = defineProps<{
 }>();
 
 
+// Defining the emits
+
+const emit = defineEmits<{
+  (e: 'render', _val: string): void,
+  (e: 'cssRender', _val: string): void,
+  (e: 'dataModel', _val: MetadataModelNode[] | null): void,
+  (e: 'change', _val: Obj | null): void,
+  (e: 'update:modelValue', _val: Obj | null): void,
+}>();
+
+
+// Defining the functions
+
+const onRender = (_val: string): void => emit('render', _val);
+
+const onCssRender = (_val: string): void => emit('cssRender', _val);
+
+const onDataModel = (_val: MetadataModelNode[] | null): void => emit('dataModel', _val);
+
+const onChange = (_val: Obj | null): void => emit('change', _val);
+
+
+// Defining the computed
+
+const val = computed({
+  get(): Obj | null {
+    return props.modelValue;
+  },
+  set(_val: Obj | null): void {
+    emit('update:modelValue', _val);
+  },
+});
+
 </script>
 
 <template>
@@ -28,7 +66,7 @@ const props = defineProps<{
         name="document"
         :template="props.template"
         :modules="props.modules"
-        :model-value="props.modelValue"
+        :value="val"
         :sandbox="props.sandbox"
         :paged="props.paged"
         :error="props.error"
@@ -39,10 +77,13 @@ const props = defineProps<{
           class="flext_layout_document"
           :template="props.template"
           :modules="props.modules"
-          :model-value="props.modelValue"
+          :value="props.modelValue"
           :sandbox="props.sandbox"
           :paged="props.paged"
           :no-theme="props.noTheme"
+          @render="onRender"
+          @cssRender="onCssRender"
+          @dataModel="onDataModel"
       >
         <template #errors="{ errors }">
           <slot name="errors" :errors="errors" />
@@ -79,7 +120,7 @@ const props = defineProps<{
         :template="props.template"
         :radio-yes-label="props.radioYesLabel"
         :radio-no-label="props.radioNoLabel"
-        :model-value="props.modelValue"
+        :value="val"
         :error="props.error"
         :disabled="props.disabled"
     >
@@ -88,9 +129,10 @@ const props = defineProps<{
           :template="props.template"
           :radio-yes-label="props.radioYesLabel"
           :radio-no-label="props.radioNoLabel"
-          :model-value="props.modelValue"
           :error="props.error"
           :disabled="props.disabled"
+          @change="onChange"
+          v-model="val"
       >
         <template #before>
           <slot name="beforeFields" />

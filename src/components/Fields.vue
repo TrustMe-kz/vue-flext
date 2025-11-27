@@ -301,7 +301,8 @@ export default defineComponent({
     },
 
     onUpdate(data: any): void {
-      this.$emit('update:modelValue', { ...this.modelValue, data });
+      this.$emit('change', { ...this.modelValue, ...data });
+      this.$emit('update:modelValue', { ...this.modelValue, ...data });
     },
   },
 
@@ -385,12 +386,13 @@ export default defineComponent({
                 :required="!!field?.isRequired"
             >
               <input
+                  type="number"
                   class="flext_fields_field"
                   :placeholder="field?.hint ?? null"
                   :value="field.value"
                   :disabled="disabled"
                   :required="!!field?.isRequired"
-                  @update:modelValue="val => field?.onUpdate(val)"
+                  @input="(e: any) => field?.onUpdate(e?.target?.value ?? null)"
                   @blur="field.extra.isTried = true"
               />
             </slot>
@@ -442,7 +444,7 @@ export default defineComponent({
                   :value="field.value"
                   :disabled="disabled"
                   :required="!!field?.isRequired"
-                  @update:modelValue="val => field?.onUpdate(val)"
+                  @input="(e: any) => field?.onUpdate(e?.target?.value ?? null)"
                   @blur="field.extra.isTried = true"
               />
             </slot>
