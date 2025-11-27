@@ -1,321 +1,194 @@
-<script lang="ts">
+<script setup lang="ts">
 
-import { defineComponent, onErrorCaptured, ref } from 'vue';
-import { Flext } from '@trustme24/flext';
-import { Nullable, NullablePropType, Obj } from '@/types';
-import { has } from '@/lib';
-import Paged from 'vue-a4';
+import { computed } from 'vue';
+import { MetadataModelNode } from '@trustme24/flext';
+import { Obj } from '@/types';
+import Document from './components/Document.vue';
+import Fields from './components/Fields.vue';
 
-export default defineComponent({
-  name: 'Flext',
 
-  components: { Paged },
+// Defining the props
 
-  props: {
-    template: {
-      type: String as NullablePropType<string>,
-      default: null
-    },
-    modules: {
-      type: Object as NullablePropType<Obj>,
-      default: null
-    },
+const props = defineProps<{
+  template?: string|null,
+  modules?: Obj | null,
+  radioYesLabel?: string|null,
+  radioNoLabel?: string|null,
 
-    modelValue: {
-      type: Object as NullablePropType<Obj>,
-      default: null
-    },
+  modelValue?: Obj | null,
 
-    sandbox: {
-      type: Boolean as NullablePropType<boolean>,
-      default: false
-    },
-    paged: {
-      type: Boolean as NullablePropType<boolean>,
-      default: false
-    },
-    noTheme: {
-      type: Boolean as NullablePropType<boolean>,
-      default: false
-    },
+  sandbox?: boolean|null,
+  paged?: boolean|null,
+  error?: boolean|null,
+  disabled?: boolean|null,
+  noTheme?: boolean|null,
+}>();
+
+
+// Defining the emits
+
+const emit = defineEmits<{
+  (e: 'render', _val: string): void,
+  (e: 'cssRender', _val: string): void,
+  (e: 'dataModel', _val: MetadataModelNode[] | null): void,
+  (e: 'change', _val: Obj | null): void,
+  (e: 'update:modelValue', _val: Obj | null): void,
+}>();
+
+
+// Defining the functions
+
+const onRender = (_val: string): void => emit('render', _val);
+
+const onCssRender = (_val: string): void => emit('cssRender', _val);
+
+const onDataModel = (_val: MetadataModelNode[] | null): void => emit('dataModel', _val);
+
+const onChange = (_val: Obj | null): void => emit('change', _val);
+
+
+// Defining the computed
+
+const val = computed({
+  get(): Obj | null {
+    return props.modelValue;
   },
-
-  setup(props) {
-    const sandboxEl = ref<HTMLDivElement | null>(null);
-    const sandboxStyle = ref<HTMLStyleElement | null>(null);
-    const sandboxRoot = ref<HTMLDivElement | null>(null);
-    const errors = ref<Error[]>([]);
-    const templateVal = ref<string|null>(props?.template ?? null);
-    const flext = ref<Flext | null>(new Flext(templateVal.value));
-    const dataModel = ref<Obj | null>(null);
-    const data = ref<Obj | null>(null);
-    const css = ref<string|null>(null);
-    const html = ref<string|null>(null);
-
-    onErrorCaptured((err) => {
-      errors.value.push(err);
-      return false;
-    });
-
-
-    return {
-      sandboxEl,
-      sandboxStyle,
-      sandboxRoot,
-      errors,
-      templateVal,
-      flext,
-      dataModel,
-      data,
-      css,
-      html,
-    };
-  },
-
-  methods: {
-    async setTemplate(val: string, data: Obj = {}): Promise<void> {
-      try {
-        this.flext?.setTemplate(val)?.setData(data ?? {});
-
-        this.html = this.flext?.html ?? null;
-
-        this.dataModel = this.flext?.model ?? null;
-
-        this.css = await this.flext?.getCss() ?? null;
-      } catch (e: any) {
-        this.errors.push(e);
-      }
-    },
-    sandboxPreviewCss(val: string): void {
-
-      // Doing some checks
-
-      if (!this.sandboxStyle) {
-        console.warn('Flext: Unable to render the document: The sandbox is not ready yet');
-        return;
-      }
-
-
-      // Rendering the styles
-
-      this.sandboxStyle.textContent = val;
-    },
-    sandboxPreview(html: string, css?: string|null): void {
-
-      // Doing some checks
-
-      if (!this.sandboxRoot) {
-        console.warn('Flext: Unable to render the document: The sandbox is not ready yet');
-        return;
-      }
-
-
-      // Rendering the document
-
-      this.sandboxPreviewCss(css ?? '');
-
-      this.sandboxRoot.innerHTML = html;
-    },
-  },
-
-  watch: {
-    template: {
-      handler(val: string|null|undefined): void {
-        this.templateVal = val;
-      },
-      immediate: true
-    },
-    modules: {
-      handler(val: Nullable<Obj>): void {
-
-        // Doing some checks
-
-        if (!val) return;
-
-
-        // Iterating for each module
-
-        for (const name in val) {
-          if (!has(val, name)) continue;
-
-          const module = val[name];
-
-          this.flext.addModule(name, module);
-        }
-      },
-      immediate: true,
-      deep: true
-    },
-    modelValue: {
-      handler(val: Nullable<Obj>): void {
-        if (!val) return;
-        this.data = val;
-      },
-      immediate: true,
-      deep: true
-    },
-
-    sandboxEl: {
-      handler(val: HTMLDivElement | null): void {
-
-        // Doing some checks
-
-        if (!val) return;
-
-
-        // Creating the sandbox
-
-        const shadow = val.attachShadow({ mode: 'open' });
-        const styleEl = document.createElement('style');
-        const rootEl = document.createElement('div');
-
-        shadow.appendChild(styleEl);
-
-        shadow.appendChild(rootEl);
-
-
-        // Updating the data
-
-        this.sandboxStyle = styleEl;
-
-        this.sandboxRoot = rootEl;
-      },
-      immediate: true,
-      deep: true
-    },
-
-    templateVal: {
-      async handler(val: Nullable<string>): Promise<void> {
-        if (!val) return;
-
-        this.errors = [];
-
-        await this.setTemplate(val, this.data);
-      },
-      immediate: true
-    },
-    css: {
-      handler(val: Nullable<string>): void {
-
-        // Doing some checks
-
-        if (!val) {
-          this.sandboxPreview(this.html, '');
-          return;
-        }
-
-
-        // Rendering the styles
-
-        this.sandboxPreview(this.html, val);
-
-        this.$emit('cssRender', val);
-      },
-      immediate: true,
-      deep: true
-    },
-    dataModel: {
-      handler(val: Nullable<Obj>): void {
-        if (val) this.$emit('compiled', val);
-        this.$emit('update:dataModel', val);
-      },
-      immediate: true,
-      deep: true
-    },
-    data: {
-      async handler(val: Nullable<Obj>): Promise<void> {
-
-        // Doing some checks
-
-        if (!val) return;
-
-
-        // Setting the template
-
-        this.errors = [];
-
-        await this.setTemplate(this.templateVal, val);
-
-
-        // Emitting the values
-
-        if (val) this.$emit('change', val);
-
-        this.$emit('update:modelValue', val);
-      },
-      immediate: true,
-      deep: true
-    },
-    html: {
-      handler(val: Nullable<string>): void {
-
-        // Doing some checks
-
-        if (!val) {
-          this.sandboxPreview('');
-
-          this.$emit('update:html', null);
-
-          return;
-        }
-
-
-        // Rendering the document
-
-        this.sandboxPreview(val, this.css);
-
-
-        // Emitting the values
-
-        this.$emit('render', val);
-
-        this.$emit('update:html', val);
-      },
-      immediate: true
-    },
+  set(_val: Obj | null): void {
+    emit('update:modelValue', _val);
   },
 });
 
 </script>
 
 <template>
-  <slot
-    v-if="errors?.length"
-    name="errors"
-    :errors="errors"
-  >
-    <ul class="flex flex-col gap-8">
-      <li v-for="(error, i) of errors" :key="i" class="flex flex-col gap-2">
-        <slot name="error" :num="i" :error="error">
-          <div class="font-semibold">
-            ⚠️&nbsp;{{ error?.name ?? 'Error' }}
-          </div>
+  <div class="flext_layout">
+    <slot
+        name="document"
+        :template="props.template"
+        :modules="props.modules"
+        :value="val"
+        :sandbox="props.sandbox"
+        :paged="props.paged"
+        :error="props.error"
+        :disabled="props.disabled"
+        :no-theme="props.noTheme"
+    >
+      <Document
+          class="flext_layout_document"
+          :template="props.template"
+          :modules="props.modules"
+          :value="props.modelValue"
+          :sandbox="props.sandbox"
+          :paged="props.paged"
+          :no-theme="props.noTheme"
+          @render="onRender"
+          @cssRender="onCssRender"
+          @dataModel="onDataModel"
+      >
+        <template #errors="{ errors }">
+          <slot name="errors" :errors="errors" />
+        </template>
 
-          <div>
-            {{ error?.message ?? 'Unknown Error' }}
-          </div>
-        </slot>
-      </li>
-    </ul>
-  </slot>
+        <template #error="{ error }">
+          <slot name="error" :error="error" />
+        </template>
 
-  <slot v-else-if="html" name="content" :paged="paged" :html="html">
-    <slot v-if="paged" name="paged" :html="html">
-      <Paged :key="html" :no-theme="noTheme">
-        <span v-html="html" />
-      </Paged>
+        <template #content="{ paged, html }">
+          <slot name="content" :paged="paged" :html="html" />
+        </template>
+
+        <template #paged="{ html }">
+          <slot name="paged" :html="html" />
+        </template>
+
+        <template #sandbox="{ html }">
+          <slot name="sandbox" :html="html" />
+        </template>
+
+        <template #noContent>
+          <slot name="noContent" />
+        </template>
+
+        <template v-slot="{ html }">
+          <slot :html="html" />
+        </template>
+      </Document>
     </slot>
 
-    <slot v-else-if="sandbox" name="sandbox" :html="html">
-      <div ref="sandboxEl" />
-    </slot>
+    <slot
+        name="fields"
+        :template="props.template"
+        :radio-yes-label="props.radioYesLabel"
+        :radio-no-label="props.radioNoLabel"
+        :value="val"
+        :error="props.error"
+        :disabled="props.disabled"
+    >
+      <Fields
+          class="flext_layout_fields"
+          :template="props.template"
+          :radio-yes-label="props.radioYesLabel"
+          :radio-no-label="props.radioNoLabel"
+          :error="props.error"
+          :disabled="props.disabled"
+          @change="onChange"
+          v-model="val"
+      >
+        <template #before>
+          <slot name="beforeFields" />
+        </template>
 
-    <slot v-else :html="html">
-      <span v-html="html" />
-    </slot>
-  </slot>
+        <template #numericField="{ field, hint, value, disabled, error, required }">
+          <slot
+              name="numericField"
+              :field="field"
+              :hint="hint"
+              :value="value"
+              :disabled="disabled"
+              :error="error"
+              :required="required"
+          />
+        </template>
 
-  <slot v-else name="noContent">
-    No Content
-  </slot>
+        <template #booleanField="{ field, value, disabled, required }">
+          <slot
+              name="booleanField"
+              :field="field"
+              :value="value"
+              :disabled="disabled"
+              :required="required"
+          />
+        </template>
+
+        <template #field="{ field, hint, value, disabled, error, required }">
+          <slot
+              name="field"
+              :field="field"
+              :hint="hint"
+              :value="value"
+              :disabled="disabled"
+              :error="error"
+              :required="required"
+          />
+        </template>
+
+        <template #after>
+          <slot name="afterFields" />
+        </template>
+
+        <template #noContent>
+          <slot name="noFields" />
+        </template>
+      </Fields>
+    </slot>
+  </div>
 </template>
+
+<style scoped lang="scss">
+
+.flext_layout {
+  display: flex;
+  gap: 4rem;
+}
+
+</style>

@@ -1,10 +1,9 @@
 {
-  "exclude": [ "dist/**", "test/**" ],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": [ "src/*" ],
-      "@flext/*": [ "dist/*" ]
+      "@flext/*": [ "../../dist/*" ],
     },
     "target": "ES2020",
     "useDefineForClassFields": true,
@@ -20,7 +19,7 @@
     /* Bundler mode */
     "outDir": "dist",
     "moduleResolution": "node",
-    "isolatedModules": true,
+    "sandboxModules": true,
     "moduleDetection": "force",
     "declaration": true,
     "sourceMap": false,
