@@ -1,6 +1,6 @@
 {
   "name": "vue-flext",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A Powerful Templating Engine",
   "keywords": ["templates", "templating engine", "modular templates", "handlebars"],
   "type": "module",
@@ -35,7 +35,7 @@
     "@tailwindcss/vite": "^4.1.17",
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.2",
-    "eslint-plugin-vue": "^10.6.1",
+    "eslint-plugin-vue": "^10.6.2",
     "globals": "^16.5.0",
     "sass-embedded": "^1.93.3",
     "typescript": "^5.9.3",
@@ -46,7 +46,7 @@
     "vue-tsc": "^3.1.5"
   },
   "peerDependencies": {
-    "@trustme24/flext": "^1.7.0"
+    "@trustme24/flext": "^1.7.3"
   },
   "dependencies": {
     "vue": "^3.5.25",

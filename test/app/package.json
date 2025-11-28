@@ -21,12 +21,13 @@
     "vue-tsc": "^3.1.5"
   },
   "dependencies": {
-    "@vueuse/core": "^14.0.0",
+    "@trustme24/flext": "^1.7.3",
+    "@vueuse/core": "^14.1.0",
     "class-variance-authority": "^0.7.1",
     "lucide-vue-next": "^0.555.0",
     "reka-ui": "^2.6.0",
     "select": "^1.1.2",
-    "shadcn": "^3.5.0",
+    "shadcn": "^3.5.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.17",
     "vue": "^3.5.25",

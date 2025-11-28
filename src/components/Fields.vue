@@ -95,9 +95,13 @@ export default defineComponent({
 
   methods: {
     objToField(val: Obj, _onUpdate: FieldUpdateHandler | null = null): Field {
+      console.log('val', val);
       const type = val?.type ?? DEFAULT_FIELD_TYPE as FieldType;
       const name = val?.name ?? null;
-      const hint = val?.label ?? name ?? null;
+      const labelStr = val?.label ?? null;
+      const hintStr = val?.hint ?? null;
+      const label = hintStr ? labelStr : null;
+      const hint = hintStr ?? labelStr ?? name ?? null;
       const isRequired = !!val?.isRequired;
       const extra = { isTried: false };
 
@@ -119,7 +123,7 @@ export default defineComponent({
 
       // Getting the field
 
-      const field = { type, name, hint, value, isRequired, onUpdate, extra };
+      const field = { type, name, label, hint, value, isRequired, onUpdate, extra };
 
 
       return field;
@@ -315,6 +319,7 @@ export default defineComponent({
   watch: {
     model: {
       handler(val: Obj[] | null): void {
+        console.log('_val_', val);
         if (val)
           this.cards = this.arrToCards(val, this.onUpdate.bind(this));
         else
@@ -371,7 +376,17 @@ export default defineComponent({
 
           <!-- Fields ("Vaccine Name", "Patient Full Name") -->
 
-          <span v-for="(field, k) of group.fields" :key="`card_${i}group_${j}_field_${k}`">
+          <div
+              v-for="(field, k) of group.fields"
+              :key="`card_${i}group_${j}_field_${k}`"
+              class="flext_field"
+          >
+
+            <!-- Field Label -->
+
+            <div v-if="field?.label" class="flext_field_label">
+              {{ field?.label ?? 'Unknown Field' }}
+            </div>
 
             <!-- Numeric Field ("Vaccine Amount") -->
 
@@ -448,7 +463,7 @@ export default defineComponent({
                   @blur="field.extra.isTried = true"
               />
             </slot>
-          </span>
+          </div>
         </div>
       </div>
     </FieldsCard>
@@ -485,6 +500,12 @@ export default defineComponent({
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
+    }
+
+    .flext_field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
   }
 }
