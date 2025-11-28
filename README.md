@@ -9,7 +9,7 @@
 - [Demo: Available at CodeSandbox](https://codesandbox.io/p/devbox/vue-flext-h7fk8r)
 - [Documentation: Available at TrustMe Wiki](https://trustmekz.atlassian.net/wiki/external/NTYzY2Y3NTgxNDczNDhiMGEwZjU5ODFiYTJlYWM4ZGY)
 
-[Vue Flext is maintained by TrustMe](https://trustme24.com/)
+[Vue Flext is maintained by TrustMe](https://trustme24.com/).
 
 ### Example
 ```vue
