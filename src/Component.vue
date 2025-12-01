@@ -160,6 +160,54 @@ const val = computed({
           />
         </template>
 
+        <template #objectField="{ field, hint, value, disabled, error, required }">
+          <slot
+              name="objectField"
+              :field="field"
+              :hint="hint"
+              :value="value"
+              :disabled="disabled"
+              :error="error"
+              :required="required"
+          />
+        </template>
+
+        <template #arrayField="{ field, hint, value, disabled, error, required }">
+          <slot
+              name="arrayField"
+              :field="field"
+              :hint="hint"
+              :value="value"
+              :disabled="disabled"
+              :error="error"
+              :required="required"
+          />
+        </template>
+
+        <template #dateField="{ field, hint, value, disabled, error, required }">
+          <slot
+              name="dateField"
+              :field="field"
+              :hint="hint"
+              :value="value"
+              :disabled="disabled"
+              :error="error"
+              :required="required"
+          />
+        </template>
+
+        <template #mixedField="{ field, hint, value, disabled, error, required }">
+          <slot
+              name="mixedField"
+              :field="field"
+              :hint="hint"
+              :value="value"
+              :disabled="disabled"
+              :error="error"
+              :required="required"
+          />
+        </template>
+
         <template #field="{ field, hint, value, disabled, error, required }">
           <slot
               name="field"

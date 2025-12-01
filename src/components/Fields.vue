@@ -9,7 +9,7 @@ import FieldsRadioRange from './FieldsRadioRange.vue';
 
 // Types
 
-export type FieldType = 'string' | 'number' | 'boolean' | 'date' | string;
+export type FieldType = 'string' | 'number' | 'boolean' | 'object' | 'array' | 'date' | 'mixed' | string;
 
 export type Field = {
   type: FieldType,
@@ -439,6 +439,102 @@ export default defineComponent({
                   ]"
                   @update:modelValue="val => field?.onUpdate(val)"
               />
+            </slot>
+
+            <!-- Object Field ({ "a": "1", "b": "2" }) -->
+
+            <slot
+                v-else-if="field?.type === 'object'"
+                name="objectField"
+                :field="field"
+                :hint="field?.hint ?? null"
+                :value="field.value"
+                :disabled="disabled"
+                :error="isFieldError(field)"
+                :required="!!field?.isRequired"
+            >
+              <textarea
+                  class="flext_fields_field"
+                  rows="4"
+                  :placeholder="field?.hint ?? null"
+                  :value="field.value"
+                  :disabled="disabled"
+                  :required="!!field?.isRequired"
+                  @input="(e: any) => field?.onUpdate(e?.target?.value ?? null)"
+                  @blur="field.extra.isTried = true"
+              ></textarea>
+            </slot>
+
+            <!-- Array Field ([ "a", "b" ]) -->
+
+            <slot
+                v-else-if="field?.type === 'array'"
+                name="arrayField"
+                :field="field"
+                :hint="field?.hint ?? null"
+                :value="field.value"
+                :disabled="disabled"
+                :error="isFieldError(field)"
+                :required="!!field?.isRequired"
+            >
+              <textarea
+                  class="flext_fields_field"
+                  rows="4"
+                  :placeholder="field?.hint ?? null"
+                  :value="field.value"
+                  :disabled="disabled"
+                  :required="!!field?.isRequired"
+                  @input="(e: any) => field?.onUpdate(e?.target?.value ?? null)"
+                  @blur="field.extra.isTried = true"
+              ></textarea>
+            </slot>
+
+            <!-- Date Field ("2025-12-01T06:00:00+00:00") -->
+
+            <slot
+                v-else-if="field?.type === 'date'"
+                name="dateField"
+                :field="field"
+                :hint="field?.hint ?? null"
+                :value="field.value"
+                :disabled="disabled"
+                :error="isFieldError(field)"
+                :required="!!field?.isRequired"
+            >
+              <input
+                  type="date"
+                  class="flext_fields_field"
+                  :placeholder="field?.hint ?? null"
+                  :value="field.value"
+                  :disabled="disabled"
+                  :required="!!field?.isRequired"
+                  @input="(e: any) => field?.onUpdate(e?.target?.value ?? null)"
+                  @blur="field.extra.isTried = true"
+              />
+            </slot>
+
+            <!-- Mixed Field (10300, "10.300") -->
+
+            <slot
+                v-else-if="field?.type === 'mixed'"
+                name="mixedField"
+                :field="field"
+                :hint="field?.hint ?? null"
+                :value="field.value"
+                :disabled="disabled"
+                :error="isFieldError(field)"
+                :required="!!field?.isRequired"
+            >
+              <textarea
+                  class="flext_fields_field"
+                  rows="4"
+                  :placeholder="field?.hint ?? null"
+                  :value="field.value"
+                  :disabled="disabled"
+                  :required="!!field?.isRequired"
+                  @input="(e: any) => field?.onUpdate(e?.target?.value ?? null)"
+                  @blur="field.extra.isTried = true"
+              ></textarea>
             </slot>
 
             <!-- Text Field ("Vaccine Name") -->
