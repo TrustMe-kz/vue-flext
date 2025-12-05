@@ -2,6 +2,7 @@
 
 import { defineComponent, ref, PropType } from 'vue';
 import { Obj, NullablePropType } from '@/types';
+import { ensureObject, ensureArray } from '@/lib';
 import Flext from '@trustme24/flext';
 import FieldsCard from './FieldsCard.vue';
 import FieldsRadioRange from './FieldsRadioRange.vue';
@@ -90,12 +91,16 @@ export default defineComponent({
 
   setup() {
     const cards = ref<Card[] | null>(null);
-    return { cards };
+
+    return {
+      ensureObject,
+      ensureArray,
+      cards,
+    };
   },
 
   methods: {
     objToField(val: Obj, _onUpdate: FieldUpdateHandler | null = null): Field {
-      console.log('val', val);
       const type = val?.type ?? DEFAULT_FIELD_TYPE as FieldType;
       const name = val?.name ?? null;
       const labelStr = val?.label ?? null;
@@ -117,7 +122,20 @@ export default defineComponent({
 
       const onUpdate = (val: any) => {
         field.value = val;
-        _onUpdate(val);
+
+        switch (type) {
+          case 'object':
+            _onUpdate(ensureObject(val));
+            break;
+
+          case 'array':
+            _onUpdate(ensureArray(val));
+            break;
+
+          default:
+            _onUpdate(val);
+            break;
+        }
       };
 
 

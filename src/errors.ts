@@ -14,3 +14,11 @@ export class BaseError extends BaseThrowable {
 export class BaseWarning extends BaseThrowable {
     public name = 'BaseWarning';
 }
+
+export class NotAnArrayWarning extends BaseWarning {
+    public name = 'NotAnArrayWarning';
+
+    constructor(message: string = 'The given value is not an array') {
+        super(message);
+    }
+}
