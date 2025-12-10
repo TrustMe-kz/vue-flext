@@ -7,7 +7,6 @@ import Flext from '@flext/index.es';
 import exampleTemplate from './exampleTemplate.hbs?raw';
 
 const template = ref<string|null>(exampleTemplate);
-
 const data = ref<Obj | null>(null);
 
 </script>
