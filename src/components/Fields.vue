@@ -597,7 +597,7 @@ export default defineComponent({
 .flext_fields {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
 
   :deep(.red) {
     color: var(--flext-color-red);
