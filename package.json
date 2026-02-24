@@ -2,7 +2,8 @@
   "name": "vue-flext",
   "version": "2.1.2",
   "description": "A Powerful Templating Engine",
-  "keywords": ["templates", "templating engine", "modular templates", "handlebars"],
+  "keywords": ["templates", "templating engine", "handlebars", "vue"],
+  "repository": "https://github.com/TrustMe-kz/vue-flext.git",
   "type": "module",
   "main": "dist/index.es.js",
   "types": "dist/src/index.d.ts",
@@ -16,40 +17,41 @@
   "scripts": {
     "lint": "eslint",
     "start:test-app": "cd test/app && npm run test-app",
-    "build:types": "vue-tsc --noEmit false",
+    "build:types": "vue-tsc -p src/tsconfig.json --noEmit false",
     "build": "vite build && npm run build:types",
     "test:app": "npm run build && cd test/app && npm i && npm run test-app",
-    "prepare": "npm run build"
+    "prepublish": "npm run build"
   },
   "files": [
-    "dist/"
+    "dist/",
+    "src/"
   ],
   "author": "Kenny Romanov",
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.28.6",
-    "@babel/core": "^7.28.6",
-    "@babel/preset-env": "^7.28.6",
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.0",
     "@babel/preset-typescript": "^7.28.5",
-    "@eslint/js": "^9.39.2",
-    "@tailwindcss/vite": "^4.1.18",
-    "@types/node": "^25.0.10",
-    "@vitejs/plugin-vue": "^6.0.3",
-    "eslint-plugin-vue": "^10.7.0",
-    "globals": "^17.1.0",
+    "@eslint/js": "^10.0.1",
+    "@tailwindcss/vite": "^4.2.1",
+    "@types/node": "^25.3.0",
+    "@vitejs/plugin-vue": "^6.0.4",
+    "eslint-plugin-vue": "^10.8.0",
+    "globals": "^17.3.0",
     "sass-embedded": "^1.97.3",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.54.0",
+    "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1",
     "vite-plugin-eslint": "^1.8.1",
-    "vue-eslint-parser": "^10.2.0",
-    "vue-tsc": "^3.2.4"
+    "vue-eslint-parser": "^10.4.0",
+    "vue-tsc": "^3.2.5"
   },
   "peerDependencies": {
-    "@trustme24/flext": "^1.9.4"
+    "@trustme24/flext": "^1.10.2"
   },
   "dependencies": {
-    "vue": "^3.5.27",
+    "vue": "^3.5.28",
     "vue-a4": "^1.0.2"
   }
 }

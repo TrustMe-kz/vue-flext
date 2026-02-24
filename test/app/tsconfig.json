@@ -2,8 +2,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": [ "src/*" ],
       "@flext/*": [ "../../dist/*" ],
+      "@flext": [ "../../dist/index.es.js" ]
     },
     "target": "ES2020",
     "useDefineForClassFields": true,
@@ -18,7 +18,7 @@
 
     /* Bundler mode */
     "outDir": "dist",
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "sandboxModules": true,
     "moduleDetection": "force",
     "declaration": true,
@@ -32,5 +32,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [ "src/**/*.ts", "src/**/*.d.ts" ]
+  "include": [ "tailwind.config.ts", "vite.config.ts" ]
 }
