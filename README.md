@@ -4,6 +4,8 @@
 [![Static Badge](https://img.shields.io/badge/NPM-Download%20%283052%29-blue)](https://www.npmjs.com/package/vue-flext)
 [![Static Badge](https://img.shields.io/badge/CodeSandbox-Preview%20%2859%29-black)](https://codesandbox.io/p/devbox/vue-flext-h7fk8r)
 
+![trustme24_flext_cover.jpg](https://raw.githubusercontent.com/TrustMe-kz/vue-flext/21ef1a6cf2a256658370454644e8e427ce100cd6/docs/trustme24_flext_logo_cover.jpg)
+
 **Vue Flext** is a technology for building reliable document interfaces in Vue.
 
 In many systems, document previews start simple and gradually become fragile: form state drifts away from the rendered document, rendering logic spreads across components and composables, versions break compatibility, and debugging becomes difficult. Vue Flext addresses this problem by bringing Flext templates into Vue as reactive, self-describing document artifacts.
@@ -39,7 +41,7 @@ Document templating often looks simple at first. Over time it tends to accumulat
 
 Typical issues include: duplicated logic between forms and document previews, undocumented fields, incompatible template versions, fragile helper usage, and weak validation before rendering.
 
-![trustme24_flext_abstract_painting.jpg](https://raw.githubusercontent.com/TrustMe-kz/flext/ae3284e6156dd8b18e1998084943636e50cd64a2/docs/trustme24_flext_abstract_painting.jpg)
+![trustme24_flext_abstract_painting.jpg](https://raw.githubusercontent.com/TrustMe-kz/vue-flext/21ef1a6cf2a256658370454644e8e427ce100cd6/docs/trustme24_flext_abstract_painting.jpg)
 
 ### A few common scenarios illustrate the problem:
 
@@ -74,7 +76,7 @@ import { ref } from 'vue';
 import Flext from 'vue-flext';
 
 const template = ref(`
-  {{!-- @v "1.0.beta3" --}}
+  {{!-- @v "1.0.beta4" --}}
   {{!-- @use "put" --}}
   <p>{{ put data.name 'Unknown user...' }}</p>
 `);
@@ -109,7 +111,7 @@ import { ref } from 'vue';
 import Flext from 'vue-flext';
 
 const template = ref(`
-  {{!-- @v "1.0.beta3" --}}
+  {{!-- @v "1.0.beta4" --}}
   {{!-- @use "put" --}}
   {{!-- @group "data" --}}
   {{!-- @field "data.someField" type="string" label="Message" required --}}
@@ -135,7 +137,7 @@ const data = ref({
 
 ## Use Cases
 
-![trustme24_flext_use_cases.jpg](https://raw.githubusercontent.com/TrustMe-kz/flext/ae3284e6156dd8b18e1998084943636e50cd64a2/docs/trustme24_flext_use_cases.jpg)
+![trustme24_flext_use_cases.jpg](https://raw.githubusercontent.com/TrustMe-kz/vue-flext/21ef1a6cf2a256658370454644e8e427ce100cd6/docs/trustme24_flext_use_cases.jpg)
 
 **Vue Flext** is intended for structured document rendering inside Vue applications. Common examples include contracts, invoices, reports, certificates, preview editors, and internal document workflows. It is particularly useful when templates must be versioned, validated, reused across screens or services, or rendered as live previews in reactive interfaces.
 
@@ -152,7 +154,7 @@ Templates should stay declarative and focused on layout. Business logic is usual
 ### Example:
 
 ```handlebars
-{{!-- @v "1.0.beta3" --}}
+{{!-- @v "1.0.beta4" --}}
 {{!-- @use "put" "date" --}}
 {{!-- @group "data" --}}
 {{!-- @field "data.city" type="string" label="City" required --}}
@@ -217,7 +219,7 @@ Preview / Data Model / Export
 
 At runtime Vue Flext passes the template through Flext, extracts Metadata, registers Modules, builds a Data Model, and generates preview. Vue then reacts to state changes, updates the rendered document, and exposes the result to the surrounding application. The output can then be passed to other tools to display, store, or generate PDF.
 
-* [Repo: More information about the core repo can be found in Flext ARCHITECTURE.md](https://github.com/TrustMe-kz/flext/blob/main/ARCHITECTURE.md)
+* [Repo: More information about the core repo can be found in Flext ARCHITECTURE.md](https://github.com/TrustMe-kz/vue-flext/blob/main/ARCHITECTURE.md)
 * [Documentation: More information about the API is available at TrustMe Wiki](https://trustmekz.atlassian.net/wiki/external/NTYzY2Y3NTgxNDczNDhiMGEwZjU5ODFiYTJlYWM4ZGY)
 
 ---
@@ -242,7 +244,7 @@ npm run test
 
 Future development focuses on improving reliability and adoption. Planned areas include stronger template validation, better Vue integration patterns, richer preview workflows, clearer compatibility rules, improved authoring experience, richer documentation, ecosystem integrations, editor support, and example-driven regression testing.
 
-![trustme24_flext_abstract_painting.jpg](https://raw.githubusercontent.com/TrustMe-kz/flext/ae3284e6156dd8b18e1998084943636e50cd64a2/docs/trustme24_flext_abstract_painting.jpg)
+![trustme24_flext_abstract_painting.jpg](https://raw.githubusercontent.com/TrustMe-kz/vue-flext/21ef1a6cf2a256658370454644e8e427ce100cd6/docs/trustme24_flext_abstract_painting.jpg)
 
 * **Contributions** are welcome. Useful areas include documentation, example templates, Vue integration patterns, slots and rendering improvements, ecosystem tooling, performance optimizations, and test coverage. Changes that affect the template syntax or core semantics should first be discussed in issues so architectural decisions remain consistent.
 

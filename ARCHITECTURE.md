@@ -2,7 +2,7 @@
 
 [< README.md](https://github.com/TrustMe-kz/vue-flext/blob/main/README.md)
 
-![trustme24_flext_cover.jpg](https://raw.githubusercontent.com/TrustMe-kz/flext/ae3284e6156dd8b18e1998084943636e50cd64a2/docs/trustme24_flext_logo_cover.jpg)
+![trustme24_flext_cover.jpg](https://raw.githubusercontent.com/TrustMe-kz/vue-flext/21ef1a6cf2a256658370454644e8e427ce100cd6/docs/trustme24_flext_logo_cover.jpg)
 
 This document explains how **Vue Flext** is built internally.
 

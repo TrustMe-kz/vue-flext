@@ -280,7 +280,7 @@ import { ref } from 'vue';
 import Flext from 'vue-flext';
 
 const template = ref(`
-  {{!-- @v "1.0.beta3" --}}
+  {{!-- @v "1.0.beta4" --}}
   {{!-- @use "put" --}}
 
   <p>Hello, {{ put data.user.name "Guest" }}!</p>
@@ -306,7 +306,7 @@ import { ref } from 'vue';
 import Flext from 'vue-flext';
 
 const template = ref(`
-  {{!-- @v "1.0.beta3" --}}
+  {{!-- @v "1.0.beta4" --}}
   {{!-- @use "put" "match" --}}
   {{!-- @field "contract.status"  type="string" label="Статус"   required --}}
   {{!-- @field "contract.manager" type="string" label="Менеджер" --}}
@@ -317,7 +317,7 @@ const template = ref(`
       {{#match:fallback}}<span class="text-red-500">Pending</span>{{/match:fallback}}
     {{/match}}
 
-    <div>Manager: {{ put contract.manager "—" }}</div>
+    <div>Manager: {{ put contract.manager "--" }}</div>
   </section>
 `);
 
