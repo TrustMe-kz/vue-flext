@@ -1,4 +1,4 @@
-# Contributing — Flext
+# Contributing — Vue Flext
 
 [< README.md](https://github.com/TrustMe-kz/vue-flext/blob/main/README.md)
 
