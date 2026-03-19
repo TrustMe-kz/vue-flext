@@ -2,7 +2,7 @@
 
 import { defineComponent, ref } from 'vue';
 import { NullablePropType, Obj } from '@/types';
-import { has, ensureArray, ensureObject } from '@/lib';
+import {has, ensureArray, ensureObject, audit} from '@/lib';
 import { BaseError } from '@/errors';
 import Flext, { MetadataModelNode } from '@trustme24/flext';
 import FieldsCard from './FieldsCard.vue';
@@ -13,11 +13,28 @@ import FieldsRadioRange from './FieldsRadioRange.vue';
 
 export type FieldType = 'string' | 'number' | 'boolean' | 'object' | 'array' | 'date' | 'mixed' | string;
 
+export type FieldValue = string | number | boolean | Obj | any[] | null;
+
+export type FieldValueOption = {
+  type: string,
+  name: string,
+  fieldName: string,
+  label?: string|null,
+  descr?: string|null,
+  value?: FieldValue | null,
+  isDisabled: boolean,
+};
+
 export type Field = {
   type: FieldType,
   name: string,
   label?: string|null,
   hint?: string|null,
+  min?: Date | number | null,
+  max?: Date | number | null,
+  minLength?: number|null,
+  maxLength?: number|null,
+  options?: FieldValueOption[] | null,
   value?: string|null,
   isRequired: boolean,
   onUpdate?: FieldUpdateHandler | null,
@@ -102,6 +119,11 @@ export default defineComponent({
       const hintStr = val?.hint ?? null;
       const label = hintStr ? labelStr : null;
       const hint = hintStr ?? labelStr ?? name ?? null;
+      const min = val?.min ?? null;
+      const max = val?.max ?? null;
+      const minLength = val?.minLength ?? null;
+      const maxLength = val?.maxLength ?? null;
+      const options = val?.options ?? null;
       const isRequired = !!val?.isRequired;
       const extra = { isTried: false };
 
@@ -136,7 +158,21 @@ export default defineComponent({
 
       // Getting the field
 
-      const field = { type, name, label, hint, value, isRequired, onUpdate, extra };
+      const field = {
+        type,
+        name,
+        label,
+        hint,
+        min,
+        max,
+        minLength,
+        maxLength,
+        options,
+        value,
+        isRequired,
+        onUpdate,
+        extra,
+      };
 
 
       return field;
@@ -352,6 +388,9 @@ export default defineComponent({
       this.$emit('change', result);
       this.$emit('update:modelValue', result);
     },
+    defaultOnUpdate(data: any): void {
+      console.warn(`Flext: Unable set field value: The 'onUpdate' method is not implemented: ` + audit(data));
+    },
   },
 
   computed: {
@@ -463,10 +502,16 @@ export default defineComponent({
                 name="numericField"
                 :field="field"
                 :hint="field?.hint ?? null"
+                :min="field?.min ?? null"
+                :max="field?.max ?? null"
+                :min-length="field?.minLength ?? null"
+                :max-length="field?.maxLength ?? null"
                 :value="field.value"
+                :options="field?.options ?? null"
                 :disabled="disabled"
-                :error="isFieldError(field)"
                 :required="!!field?.isRequired"
+                :error="isFieldError(field)"
+                :on-update="field?.onUpdate ?? defaultOnUpdate"
             >
               <input
                   type="number"
@@ -490,6 +535,8 @@ export default defineComponent({
                 :value="field.value"
                 :disabled="disabled"
                 :required="!!field?.isRequired"
+                :error="isFieldError(field)"
+                :on-update="field?.onUpdate ?? defaultOnUpdate"
             >
               <FieldsRadioRange
                   :label="field?.hint ?? null"
@@ -519,9 +566,11 @@ export default defineComponent({
                 :field="field"
                 :hint="field?.hint ?? null"
                 :value="field.value"
+                :options="field?.options ?? null"
                 :disabled="disabled"
-                :error="isFieldError(field)"
                 :required="!!field?.isRequired"
+                :error="isFieldError(field)"
+                :on-update="field?.onUpdate ?? defaultOnUpdate"
             >
               <textarea
                   class="flext_fields_field"
@@ -544,9 +593,11 @@ export default defineComponent({
                 :field="field"
                 :hint="field?.hint ?? null"
                 :value="field.value"
+                :options="field?.options ?? null"
                 :disabled="disabled"
-                :error="isFieldError(field)"
                 :required="!!field?.isRequired"
+                :error="isFieldError(field)"
+                :on-update="field?.onUpdate ?? defaultOnUpdate"
             >
               <textarea
                   class="flext_fields_field"
@@ -568,10 +619,14 @@ export default defineComponent({
                 name="dateField"
                 :field="field"
                 :hint="field?.hint ?? null"
+                :min="field?.min ?? null"
+                :max="field?.max ?? null"
                 :value="field.value"
+                :options="field?.options ?? null"
                 :disabled="disabled"
-                :error="isFieldError(field)"
                 :required="!!field?.isRequired"
+                :error="isFieldError(field)"
+                :on-update="field?.onUpdate ?? defaultOnUpdate"
             >
               <input
                   type="date"
@@ -593,10 +648,16 @@ export default defineComponent({
                 name="mixedField"
                 :field="field"
                 :hint="field?.hint ?? null"
+                :min="field?.min ?? null"
+                :max="field?.max ?? null"
+                :min-length="field?.minLength ?? null"
+                :max-length="field?.maxLength ?? null"
                 :value="field.value"
+                :options="field?.options ?? null"
                 :disabled="disabled"
-                :error="isFieldError(field)"
                 :required="!!field?.isRequired"
+                :error="isFieldError(field)"
+                :on-update="field?.onUpdate ?? defaultOnUpdate"
             >
               <textarea
                   class="flext_fields_field"
@@ -618,10 +679,14 @@ export default defineComponent({
                 name="field"
                 :field="field"
                 :hint="field?.hint ?? null"
+                :min-length="field?.minLength ?? null"
+                :max-length="field?.maxLength ?? null"
                 :value="field.value"
+                :options="field?.options ?? null"
                 :disabled="disabled"
-                :error="isFieldError(field)"
                 :required="!!field?.isRequired"
+                :error="isFieldError(field)"
+                :on-update="field?.onUpdate ?? defaultOnUpdate"
             >
               <input
                   class="flext_fields_field"
