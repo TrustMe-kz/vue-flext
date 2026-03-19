@@ -11,8 +11,8 @@ import Fields from './components/Fields.vue';
 
 const props = defineProps<{
   template?: string|null,
-  field?: string|null,
   modules?: Obj | null,
+  fieldsDisplayProp?: string|null,
   radioYesLabel?: string|null,
   radioNoLabel?: string|null,
 
@@ -128,7 +128,7 @@ const val = computed({
       <Fields
           class="flext_layout_fields"
           :template="props.template"
-          :prop="field"
+          :prop="fieldsDisplayProp"
           :radio-yes-label="props.radioYesLabel"
           :radio-no-label="props.radioNoLabel"
           :error="props.error"
