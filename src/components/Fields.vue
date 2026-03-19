@@ -1,10 +1,10 @@
 <script lang="ts">
 
-import {defineComponent, PropType, ref} from 'vue';
-import {NullablePropType, Obj} from '@/types';
-import {ensureArray, ensureObject, has} from '@/lib';
-import {BaseError} from '@/errors';
-import Flext, {MetadataModelNode} from '@trustme24/flext';
+import { defineComponent, ref } from 'vue';
+import { NullablePropType, Obj } from '@/types';
+import { has, ensureArray, ensureObject } from '@/lib';
+import { BaseError } from '@/errors';
+import Flext, { MetadataModelNode } from '@trustme24/flext';
 import FieldsCard from './FieldsCard.vue';
 import FieldsRadioRange from './FieldsRadioRange.vue';
 
@@ -62,7 +62,7 @@ export default defineComponent({
   components: { FieldsCard, FieldsRadioRange },
 
   props: {
-    template: String as PropType<string>,
+    template: String as NullablePropType<string>,
     prop: String as NullablePropType<string>,
     model: Array as NullablePropType<MetadataModelNode[]>,
     radioYesLabel: {
@@ -80,11 +80,11 @@ export default defineComponent({
     },
 
     error: {
-      type: Boolean as PropType<boolean>,
+      type: Boolean as NullablePropType<boolean>,
       default: false,
     },
     disabled: {
-      type: Boolean as PropType<boolean>,
+      type: Boolean as NullablePropType<boolean>,
       default: false,
     },
   },
@@ -467,7 +467,6 @@ export default defineComponent({
                 :disabled="disabled"
                 :error="isFieldError(field)"
                 :required="!!field?.isRequired"
-                :data-flext-field="field?.name ?? 'unknown'"
             >
               <input
                   type="number"
@@ -476,6 +475,7 @@ export default defineComponent({
                   :value="field.value"
                   :disabled="disabled"
                   :required="!!field?.isRequired"
+                  :data-flext-field="field?.name ?? 'unknown'"
                   @input="(e: any) => field?.onUpdate(e?.target?.value ?? null)"
                   @blur="field.extra.isTried = true"
               />
@@ -490,7 +490,6 @@ export default defineComponent({
                 :value="field.value"
                 :disabled="disabled"
                 :required="!!field?.isRequired"
-                :data-flext-field="field?.name ?? 'unknown'"
             >
               <FieldsRadioRange
                   :label="field?.hint ?? null"
@@ -507,6 +506,7 @@ export default defineComponent({
                       value: false,
                     },
                   ]"
+                  :data-flext-field="field?.name ?? 'unknown'"
                   @update:modelValue="val => field?.onUpdate(val)"
               />
             </slot>
@@ -522,7 +522,6 @@ export default defineComponent({
                 :disabled="disabled"
                 :error="isFieldError(field)"
                 :required="!!field?.isRequired"
-                :data-flext-field="field?.name ?? 'unknown'"
             >
               <textarea
                   class="flext_fields_field"
@@ -531,6 +530,7 @@ export default defineComponent({
                   :value="field.value"
                   :disabled="disabled"
                   :required="!!field?.isRequired"
+                  :data-flext-field="field?.name ?? 'unknown'"
                   @input="(e: any) => field?.onUpdate(e?.target?.value ?? null)"
                   @blur="field.extra.isTried = true"
               ></textarea>
@@ -547,7 +547,6 @@ export default defineComponent({
                 :disabled="disabled"
                 :error="isFieldError(field)"
                 :required="!!field?.isRequired"
-                :data-flext-field="field?.name ?? 'unknown'"
             >
               <textarea
                   class="flext_fields_field"
@@ -556,6 +555,7 @@ export default defineComponent({
                   :value="field.value"
                   :disabled="disabled"
                   :required="!!field?.isRequired"
+                  :data-flext-field="field?.name ?? 'unknown'"
                   @input="(e: any) => field?.onUpdate(e?.target?.value ?? null)"
                   @blur="field.extra.isTried = true"
               ></textarea>
@@ -572,7 +572,6 @@ export default defineComponent({
                 :disabled="disabled"
                 :error="isFieldError(field)"
                 :required="!!field?.isRequired"
-                :data-flext-field="field?.name ?? 'unknown'"
             >
               <input
                   type="date"
@@ -581,6 +580,7 @@ export default defineComponent({
                   :value="field.value"
                   :disabled="disabled"
                   :required="!!field?.isRequired"
+                  :data-flext-field="field?.name ?? 'unknown'"
                   @input="(e: any) => field?.onUpdate(e?.target?.value ?? null)"
                   @blur="field.extra.isTried = true"
               />
@@ -597,7 +597,6 @@ export default defineComponent({
                 :disabled="disabled"
                 :error="isFieldError(field)"
                 :required="!!field?.isRequired"
-                :data-flext-field="field?.name ?? 'unknown'"
             >
               <textarea
                   class="flext_fields_field"
@@ -606,6 +605,7 @@ export default defineComponent({
                   :value="field.value"
                   :disabled="disabled"
                   :required="!!field?.isRequired"
+                  :data-flext-field="field?.name ?? 'unknown'"
                   @input="(e: any) => field?.onUpdate(e?.target?.value ?? null)"
                   @blur="field.extra.isTried = true"
               ></textarea>
@@ -622,7 +622,6 @@ export default defineComponent({
                 :disabled="disabled"
                 :error="isFieldError(field)"
                 :required="!!field?.isRequired"
-                :data-flext-field="field?.name ?? 'unknown'"
             >
               <input
                   class="flext_fields_field"
@@ -630,6 +629,7 @@ export default defineComponent({
                   :value="field.value"
                   :disabled="disabled"
                   :required="!!field?.isRequired"
+                  :data-flext-field="field?.name ?? 'unknown'"
                   @input="(e: any) => field?.onUpdate(e?.target?.value ?? null)"
                   @blur="field.extra.isTried = true"
               />

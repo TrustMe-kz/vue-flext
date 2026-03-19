@@ -1,6 +1,6 @@
 {
   "name": "vue-flext",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "A Powerful Templating Engine",
   "keywords": ["templates", "templating engine", "handlebars", "vue"],
   "repository": "https://github.com/TrustMe-kz/vue-flext.git",
