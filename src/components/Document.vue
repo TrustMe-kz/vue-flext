@@ -100,7 +100,7 @@ export default defineComponent({
       // Doing some checks
 
       if (!this.sandboxStyles) {
-        console.warn('Flext: Unable to render the document: The sandbox is not ready yet');
+        console.warn('Flext: Unable to render document: The sandbox is not ready yet');
         return;
       }
 
@@ -114,7 +114,7 @@ export default defineComponent({
       // Doing some checks
 
       if (!this.sandboxRoot) {
-        console.warn('Flext: Unable to render the document: The sandbox is not ready yet');
+        console.warn('Flext: Unable to render document: The sandbox is not ready yet');
         return;
       }
 

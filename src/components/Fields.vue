@@ -3,9 +3,10 @@
 import { defineComponent, ref, PropType } from 'vue';
 import { Obj, NullablePropType } from '@/types';
 import { ensureObject, ensureArray } from '@/lib';
-import Flext from '@trustme24/flext';
+import Flext, { MetadataModelNode } from '@trustme24/flext';
 import FieldsCard from './FieldsCard.vue';
 import FieldsRadioRange from './FieldsRadioRange.vue';
+import {BaseError} from "@/errors";
 
 
 // Types
@@ -65,6 +66,8 @@ export default defineComponent({
       type: String as PropType<string>,
       required: true
     },
+    prop: String as NullablePropType<string>,
+    model: Array as NullablePropType<MetadataModelNode[]>,
     radioYesLabel: {
       type: String as NullablePropType<string>,
       default: 'Yes'
@@ -91,12 +94,7 @@ export default defineComponent({
 
   setup() {
     const cards = ref<Card[] | null>(null);
-
-    return {
-      ensureObject,
-      ensureArray,
-      cards,
-    };
+    return { cards };
   },
 
   methods: {
@@ -329,15 +327,36 @@ export default defineComponent({
   },
 
   computed: {
-    model() {
-      return new Flext().setTemplate(this.template).model;
+    newModel(): MetadataModelNode[] {
+
+      // Doing some checks
+
+      if (this.model) return this.model;
+
+      if (!this.prop) return new Flext().setTemplate(this.template).model;
+
+
+      // Getting the node
+
+      const items = this.prop?.split('.') ?? [];
+      let result = new Flext().setTemplate(this.template).model;
+
+      for (const item of items) {
+        const node = result?.find(n => n.name === item) ?? null;
+
+        if (!node) throw new BaseError(`Flext: Unable to render fields: Prop '${this.prop}' does not exist in the data model`);
+
+        result = node.$ as MetadataModelNode[];
+      }
+
+
+      return result;
     },
   },
 
   watch: {
-    model: {
+    newModel: {
       handler(val: Obj[] | null): void {
-        console.log('_val_', val);
         if (val)
           this.cards = this.arrToCards(val, this.onUpdate.bind(this));
         else
@@ -374,7 +393,7 @@ export default defineComponent({
         class="flext_fields_card"
         :label="card?.label ?? card?.name ?? 'Fields'"
         :required="!!card?.isRequired"
-        no-collapse
+        :data-flext-card="card?.name ?? 'unknown'"
     >
       <div class="flext_fields_card_inner">
 
@@ -384,6 +403,7 @@ export default defineComponent({
             v-for="(group, j) of card.groups"
             :key="`card_${i}group_${j}`"
             class="flext_fields_group"
+            :data-flext-group="group?.name ?? 'unknown'"
         >
 
           <!-- Group Label ("Department*") -->
@@ -417,6 +437,7 @@ export default defineComponent({
                 :disabled="disabled"
                 :error="isFieldError(field)"
                 :required="!!field?.isRequired"
+                :data-flext-field="field?.name ?? 'unknown'"
             >
               <input
                   type="number"
@@ -439,6 +460,7 @@ export default defineComponent({
                 :value="field.value"
                 :disabled="disabled"
                 :required="!!field?.isRequired"
+                :data-flext-field="field?.name ?? 'unknown'"
             >
               <FieldsRadioRange
                   :label="field?.hint ?? null"
@@ -470,6 +492,7 @@ export default defineComponent({
                 :disabled="disabled"
                 :error="isFieldError(field)"
                 :required="!!field?.isRequired"
+                :data-flext-field="field?.name ?? 'unknown'"
             >
               <textarea
                   class="flext_fields_field"
@@ -494,6 +517,7 @@ export default defineComponent({
                 :disabled="disabled"
                 :error="isFieldError(field)"
                 :required="!!field?.isRequired"
+                :data-flext-field="field?.name ?? 'unknown'"
             >
               <textarea
                   class="flext_fields_field"
@@ -518,6 +542,7 @@ export default defineComponent({
                 :disabled="disabled"
                 :error="isFieldError(field)"
                 :required="!!field?.isRequired"
+                :data-flext-field="field?.name ?? 'unknown'"
             >
               <input
                   type="date"
@@ -542,6 +567,7 @@ export default defineComponent({
                 :disabled="disabled"
                 :error="isFieldError(field)"
                 :required="!!field?.isRequired"
+                :data-flext-field="field?.name ?? 'unknown'"
             >
               <textarea
                   class="flext_fields_field"
@@ -566,6 +592,7 @@ export default defineComponent({
                 :disabled="disabled"
                 :error="isFieldError(field)"
                 :required="!!field?.isRequired"
+                :data-flext-field="field?.name ?? 'unknown'"
             >
               <input
                   class="flext_fields_field"
@@ -597,7 +624,7 @@ export default defineComponent({
 .flext_fields {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 3.2rem;
 
   :deep(.red) {
     color: var(--flext-color-red);
