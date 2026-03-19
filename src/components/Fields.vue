@@ -1,12 +1,12 @@
 <script lang="ts">
 
-import { defineComponent, ref, PropType } from 'vue';
-import { Obj, NullablePropType } from '@/types';
-import { ensureObject, ensureArray } from '@/lib';
-import Flext, { MetadataModelNode } from '@trustme24/flext';
+import {defineComponent, PropType, ref} from 'vue';
+import {NullablePropType, Obj} from '@/types';
+import {ensureArray, ensureObject, has} from '@/lib';
+import {BaseError} from '@/errors';
+import Flext, {MetadataModelNode} from '@trustme24/flext';
 import FieldsCard from './FieldsCard.vue';
 import FieldsRadioRange from './FieldsRadioRange.vue';
-import {BaseError} from "@/errors";
 
 
 // Types
@@ -62,10 +62,7 @@ export default defineComponent({
   components: { FieldsCard, FieldsRadioRange },
 
   props: {
-    template: {
-      type: String as PropType<string>,
-      required: true
-    },
+    template: String as PropType<string>,
     prop: String as NullablePropType<string>,
     model: Array as NullablePropType<MetadataModelNode[]>,
     radioYesLabel: {
@@ -321,8 +318,39 @@ export default defineComponent({
     },
 
     onUpdate(data: any): void {
-      this.$emit('change', { ...this.modelValue, ...data });
-      this.$emit('update:modelValue', { ...this.modelValue, ...data });
+
+      // Getting the data
+
+      const items = this.prop?.split('.') ?? [];
+      const result: Obj = {};
+      let cursor = result;
+
+      for (const item of items) {
+        cursor[item] = {};
+        cursor = cursor[item];
+      }
+
+
+      // Defining the functions
+
+      const apply = (val: Obj): void => {
+        for (const fieldName in val) {
+          if (!has(val, fieldName)) continue;
+          cursor[fieldName] = val[fieldName];
+        }
+      };
+
+
+      // Applying the data to the cursor
+
+      apply(this.modelValue);
+      apply(data);
+
+
+      // Emitting the values
+
+      this.$emit('change', result);
+      this.$emit('update:modelValue', result);
     },
   },
 
@@ -331,9 +359,11 @@ export default defineComponent({
 
       // Doing some checks
 
-      if (this.model) return this.model;
+      if (!this.model && !this.template)
+        throw new BaseError(`Flext: Unable to render fields: The template is empty`);
 
-      if (!this.prop) return new Flext().setTemplate(this.template).model;
+      if (this.model && !this.template)
+        return this.model;
 
 
       // Getting the node
