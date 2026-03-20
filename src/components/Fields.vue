@@ -554,7 +554,7 @@ export default defineComponent({
                     },
                   ]"
                   :data-flext-field="field?.name ?? 'unknown'"
-                  @update:modelValue="val => field?.onUpdate(val)"
+                  @update:modelValue="field.onUpdate"
               />
             </slot>
 

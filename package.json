@@ -1,8 +1,8 @@
 {
   "name": "vue-flext",
-  "version": "2.2.2",
-  "description": "A Powerful Templating Engine",
-  "keywords": ["templates", "templating engine", "handlebars", "vue"],
+  "version": "2.2.4",
+  "description": "A technology for building reliable document templates",
+  "keywords": ["templates", "templating engine", "documents", "handlebars", "vue"],
   "repository": "https://github.com/TrustMe-kz/vue-flext.git",
   "type": "module",
   "main": "dist/index.es.js",
@@ -48,7 +48,7 @@
     "vue-tsc": "^3.2.6"
   },
   "peerDependencies": {
-    "@trustme24/flext": "^1.10.2"
+    "@trustme24/flext": "^1.10.6"
   },
   "dependencies": {
     "vue": "^3.5.30",

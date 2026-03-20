@@ -1,7 +1,7 @@
 <script lang="ts">
 
 import { defineComponent, onErrorCaptured, ref } from 'vue';
-import { Flext } from '@trustme24/flext';
+import { Flext, TemplateError } from '@trustme24/flext';
 import { Nullable, NullablePropType, Obj } from '@/types';
 import { has } from '@/lib';
 import Paged from 'vue-a4';
@@ -64,7 +64,7 @@ export default defineComponent({
 
     onErrorCaptured((err) => {
       errors.value.push(err);
-      return false;
+      return !(err instanceof TemplateError);
     });
 
 
