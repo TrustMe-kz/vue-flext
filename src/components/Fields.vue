@@ -413,7 +413,10 @@ export default defineComponent({
       for (const item of items) {
         const node = result?.find(n => n.name === item) ?? null;
 
-        if (!node) throw new BaseError(`Flext: Unable to render fields: Prop '${this.prop}' does not exist in the data model`);
+        if (!node) {
+          console.warn(`Flext: Unable to render fields: Prop '${this.prop}' does not exist in the data model`);
+          return [];
+        }
 
         result = node.$ as MetadataModelNode[];
       }

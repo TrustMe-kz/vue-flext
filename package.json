@@ -1,6 +1,6 @@
 {
   "name": "vue-flext",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "A technology for building reliable document templates",
   "keywords": ["templates", "templating engine", "documents", "handlebars", "vue"],
   "repository": "https://github.com/TrustMe-kz/vue-flext.git",
@@ -40,9 +40,9 @@
     "eslint-plugin-vue": "^10.8.0",
     "globals": "^17.4.0",
     "sass-embedded": "^1.98.0",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.57.1",
-    "vite": "^8.0.1",
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.57.2",
+    "vite": "^8.0.3",
     "vite-plugin-eslint": "^1.8.1",
     "vue-eslint-parser": "^10.4.0",
     "vue-tsc": "^3.2.6"
@@ -51,7 +51,7 @@
     "@trustme24/flext": "^1.10.6"
   },
   "dependencies": {
-    "vue": "^3.5.30",
+    "vue": "^3.5.31",
     "vue-a4": "^1.0.2"
   }
 }
