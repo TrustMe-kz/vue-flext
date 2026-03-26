@@ -454,7 +454,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div v-if="cards" class="flext_fields">
+  <div v-if="cards && cards?.length" class="flext_fields">
     <slot name="before" />
 
     <!-- Cards ("Hospital") -->
