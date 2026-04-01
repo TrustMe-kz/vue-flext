@@ -280,7 +280,7 @@ import { ref } from 'vue';
 import Flext from 'vue-flext';
 
 const template = ref(`
-  {{!-- @v "1.0.beta4" --}}
+  {{!-- @syntax "1.0" --}}
   {{!-- @use "put" --}}
 
   <p>Hello, {{ put data.user.name "Guest" }}!</p>
@@ -306,7 +306,7 @@ import { ref } from 'vue';
 import Flext from 'vue-flext';
 
 const template = ref(`
-  {{!-- @v "1.0.beta4" --}}
+  {{!-- @syntax "1.0" --}}
   {{!-- @use "put" "match" --}}
   {{!-- @field "contract.status"  type="string" label="Статус"   required --}}
   {{!-- @field "contract.manager" type="string" label="Менеджер" --}}

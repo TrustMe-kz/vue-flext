@@ -41,14 +41,14 @@
     "globals": "^17.4.0",
     "sass-embedded": "^1.98.0",
     "typescript": "^6.0.2",
-    "typescript-eslint": "^8.57.2",
+    "typescript-eslint": "^8.58.0",
     "vite": "^8.0.3",
     "vite-plugin-eslint": "^1.8.1",
     "vue-eslint-parser": "^10.4.0",
     "vue-tsc": "^3.2.6"
   },
   "peerDependencies": {
-    "@trustme24/flext": "^1.10.6"
+    "@trustme24/flext": "^2.0.1"
   },
   "dependencies": {
     "vue": "^3.5.31",

@@ -1,5 +1,4 @@
 @import "tailwindcss" source(".");
-@import "@trustme24/flext/index.css";
 @import "vue-a4/index.css";
 
 :root {

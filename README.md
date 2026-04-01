@@ -76,7 +76,7 @@ import { ref } from 'vue';
 import Flext from 'vue-flext';
 
 const template = ref(`
-  {{!-- @v "1.0.beta4" --}}
+  {{!-- @syntax "1.0" --}}
   {{!-- @use "put" --}}
   <p>{{ put data.name 'Unknown user...' }}</p>
 `);
@@ -95,7 +95,7 @@ const data = ref({
 
 ## Core Ideas
 
-A **Vue Flext** template contains three conceptual layers. The first layer is markup: HTML and standard Handlebars expressions. The second layer is Metadata written as directives such as `@v`, `@field`, or `@use`. The third layer is runtime behavior provided through Modules and helpers.
+A **Vue Flext** template contains three conceptual layers. The first layer is markup: HTML and standard Handlebars expressions. The second layer is Metadata written as directives such as `@syntax`, `@field`, or `@use`. The third layer is runtime behavior provided through Modules and helpers.
 
 Vue Flext adds a fourth practical layer: reactive integration with Vue. The template remains a self-contained artifact, while Vue manages state updates, component composition, user input, and application-level interaction around it.
 
@@ -111,12 +111,12 @@ import { ref } from 'vue';
 import Flext from 'vue-flext';
 
 const template = ref(`
-  {{!-- @v "1.0.beta4" --}}
+  {{!-- @syntax "1.0" --}}
   {{!-- @use "put" --}}
   {{!-- @group "data" --}}
-  {{!-- @field "data.someField" type="string" label="Message" required --}}
+  {{!-- @field "data.someField" type="string" label="Hello World" required --}}
 
-  <p class="text-center text-red-500">
+  <p class="text-center">
     {{ put data.someField 'No hello world...' }}
   </p>
 `);
@@ -154,7 +154,7 @@ Templates should stay declarative and focused on layout. Business logic is usual
 ### Example:
 
 ```handlebars
-{{!-- @v "1.0.beta4" --}}
+{{!-- @syntax "1.0" --}}
 {{!-- @use "put" "date" --}}
 {{!-- @group "data" --}}
 {{!-- @field "data.city" type="string" label="City" required --}}
