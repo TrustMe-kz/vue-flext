@@ -1,6 +1,6 @@
 {
   "name": "vue-flext",
-  "version": "2.2.8",
+  "version": "2.2.9",
   "description": "A technology for building reliable document templates",
   "keywords": ["templates", "templating engine", "documents", "handlebars", "vue"],
   "repository": "https://github.com/TrustMe-kz/vue-flext.git",
@@ -48,7 +48,7 @@
     "vue-tsc": "^3.2.8"
   },
   "peerDependencies": {
-    "@trustme24/flext": "^2.0.6"
+    "@trustme24/flext": "^2.0.8"
   },
   "dependencies": {
     "vue": "^3.5.33",
